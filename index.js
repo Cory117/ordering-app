@@ -1,4 +1,4 @@
-import { menuArray, orderArray } from './data.js'
+import { menuArray } from './data.js'
 
 // VARIABLES
 
@@ -9,6 +9,7 @@ const checkout = document.getElementById('checkout')
 const paymentModal = document.getElementById('payment-modal')
 const closeModalBtn = document.getElementById('close-modal-btn')
 const paymentForm = document.getElementById('payment-form')
+let orderArray = []
 
 // EVENT LISTENERS
 
@@ -20,7 +21,7 @@ document.addEventListener('click', function(e){
         removeItem(e.target.dataset.remove)
     }
     else if(e.target.dataset.complete){
-        paymentModal.style.display = 'block';
+        completeOrder()
     }
 })
 
@@ -42,6 +43,7 @@ paymentForm.addEventListener('submit', function(e){
         <h2>Thanks, ${fullName}! Your order is on its way!</h2>
     </div>
     `
+    orderArray = []
 })
 
 // MENU ITEMS
@@ -70,7 +72,6 @@ function addItem(itemId) {
     })
     orderArray.push(targetItemObj)
     render()
-    getTotalPrice()
 }
 
 // ORDER TITLE
@@ -89,6 +90,7 @@ function getOrderTitle() {
 // ORDER DETAILS
 
 function getOrder() {
+    order.style.display = 'block';
     let orderHtml = ''
     
     orderArray.forEach(function(item, index){
@@ -106,7 +108,6 @@ function getOrder() {
 function removeItem(orderIndex) {
     orderArray.splice(orderIndex, 1)
     render()
-    getTotalPrice()
 }
 
 // CHECKOUT DETAILS
@@ -140,12 +141,17 @@ function getTotalPrice() {
     }
 }
 
+function completeOrder() {
+    paymentModal.style.display = 'block';
+}
+
 // RENDER ITEMS
 
 function render() {
     menu.innerHTML = getMenu()
     orderTitle.innerHTML = getOrderTitle()
     order.innerHTML = getOrder()
+    getTotalPrice()
 }
 
 render()
